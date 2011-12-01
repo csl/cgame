@@ -1,5 +1,7 @@
 package com.game;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,33 +35,36 @@ public class CgameActivity extends Activity implements OnClickListener
     	Intent newAct = new Intent();
     	Bundle bData = null;
     	
+    	int tmp=(int)((Math.random()*2)+1);  
+    	
+    	if (tmp == 1)
+            newAct.setClass( CgameActivity.this, cshow.class );
+    	else
+            newAct.setClass( CgameActivity.this, videoshow.class );
+    		
+    	
     	switch (v.getId()) {
 	        case R.id.A: // Do something when click button1
-	            newAct.setClass( CgameActivity.this, cshow.class );
 	            bData = new Bundle();
 	            bData.putInt( "id", 1);
 	            bData.putString( "title", "¤ô³¾«OÅ@°Ï");
 	            break;
 	        case R.id.B: // Do something when click button2
-	            newAct.setClass( CgameActivity.this, cshow.class );
 	            bData = new Bundle();
 	            bData.putInt( "id", 2);
 	            bData.putString( "title", "ÆQ¥Ð");
 	            break;
 	        case R.id.C: // Do something when click button3
-	            newAct.setClass( CgameActivity.this, cshow.class );
 	            bData = new Bundle();
 	            bData.putInt( "id", 3);
 	            bData.putString( "title", "¥x¦¿ÄH³bÀ]");
 	            break;
 	        case R.id.D: // Do something when click button4
-	            newAct.setClass( CgameActivity.this, cshow.class );
 	            bData = new Bundle();
 	            bData.putInt( "id", 4);
 	            bData.putString( "title", "¥|¯ó¬õ¾ðªL°Ï");
 	            break;
 	        case R.id.E: // Do something when click button5
-	            newAct.setClass( CgameActivity.this, cshow.class );
 	            bData = new Bundle();
 	            bData.putInt( "id", 5);
 	            bData.putString( "title", "¶ý¯ª¼q");

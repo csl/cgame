@@ -20,11 +20,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
+import whu.iss.sric.android.WelActivity;
 
 public class videoshow extends Activity implements OnClickListener,OnErrorListener,
         OnBufferingUpdateListener, OnCompletionListener,
@@ -63,54 +66,25 @@ public class videoshow extends Activity implements OnClickListener,OnErrorListen
         
         // Set up the play/pause/reset/stop buttons
         mPreview = (SurfaceView) findViewById(R.id.sv);
-        //mPath = (EditText) findViewById(R.id.path);
-        //mPlay = (ImageButton) findViewById(R.id.play);
-        //mPause = (ImageButton) findViewById(R.id.pause);
-        //mReset = (ImageButton) findViewById(R.id.reset);
-        //mStop = (ImageButton) findViewById(R.id.stop);
+
+        // Set the transparency
+        getWindow().setFormat(PixelFormat.TRANSPARENT);
 
         Button A = (Button)findViewById(R.id.next);
         A.setOnClickListener(this);
 
-        
-        playVideo();
-
-        /*
-        mPause.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (mp != null) {
-                    mp.pause();
-                }
-            }
-        });
-        mReset.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (mp != null) {
-                    mp.seekTo(0);
-                }
-            }
-        });
-        mStop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (mp != null) {
-                    mp.stop();
-                    mp.release();
-                }
-            }
-        });
-		*/
-        
-        // Set the transparency
-        getWindow().setFormat(PixelFormat.TRANSPARENT);
-
         // Set a size for the video screen
         holder = mPreview.getHolder();
         holder.addCallback(this);
-        holder.setFixedSize(320, 200);
+        //holder.setFixedSize(320, 200);
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        playVideo();
     }
 
     private void playVideo() {
         try {
+        	
             final String path = "/sdcard/" + id + ".wmv";
             Log.v(TAG, "path: " + path);
 
@@ -130,7 +104,7 @@ public class videoshow extends Activity implements OnClickListener,OnErrorListen
             mp.setAudioStreamType(2);
 
             // Set the surface for the video output
-            mp.setDisplay((SurfaceHolder) mPreview.getHolder().getSurface());
+            mp.setDisplay(holder);
 
             // Set the data source in another thread
             // which actually downloads the mp3 or videos
@@ -138,7 +112,9 @@ public class videoshow extends Activity implements OnClickListener,OnErrorListen
             Runnable r = new Runnable() {
                 public void run() {
                     try {
-                        setDataSource(path);
+                    	//FileInputStream fileInputStream = new FileInputStream(path);
+                    	mp.setDataSource(path);  
+                    	//mp.prepare(); 
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage(), e);
                     }
@@ -161,44 +137,6 @@ public class videoshow extends Activity implements OnClickListener,OnErrorListen
             if (mp != null) {
                 mp.stop();
                 mp.release();
-            }
-        }
-    }
-
-    /**
-     * If the user has specified a local url, then we download the
-     * url stream to a temporary location and then call the setDataSource
-     * for that local file
-     *
-     * @param path
-     * @throws IOException
-     */
-    private void setDataSource(String path) throws IOException {
-        if (!URLUtil.isNetworkUrl(path)) {
-            mp.setDataSource(path);
-        } else {
-            URL url = new URL(path);
-            URLConnection cn = url.openConnection();
-            cn.connect();
-            InputStream stream = cn.getInputStream();
-            if (stream == null)
-                throw new RuntimeException("stream is null");
-            File temp = File.createTempFile("mediaplayertmp", "dat");
-            String tempPath = temp.getAbsolutePath();
-            FileOutputStream out = new FileOutputStream(temp);
-            byte buf[] = new byte[128];
-            do {
-                int numread = stream.read(buf);
-                if (numread <= 0)
-                    break;
-                out.write(buf, 0, numread);
-            } while (true);
-            mp.setDataSource(tempPath);
-            try {
-                stream.close();
-            }
-            catch (IOException ex) {
-                Log.e(TAG, "error: " + ex.getMessage(), ex);
             }
         }
     }
@@ -246,11 +184,11 @@ public class videoshow extends Activity implements OnClickListener,OnErrorListen
 	        case R.id.next: // Do something when click button1
 	        	
                 if (mp != null) {
-                    mp.stop();
-                    mp.release();
+                    //mp.stop();
+                    //mp.release();
                 }
 	        	
-	            newAct.setClass( videoshow.this, cshow.class );
+	            newAct.setClass( videoshow.this, WelActivity.class );
 	            bData = new Bundle();
 	            
 	            if (id == 1)

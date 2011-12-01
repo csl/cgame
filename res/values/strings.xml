@@ -3,5 +3,10 @@
 
     <string name="hello">Hello World, CgameActivity!</string>
     <string name="app_name">cgame</string>
-    
+    <string name="time">本關花費時間：$秒</string>
+    <string name="quit">離開</string>
+    <string name="sure_quit">確定要離開遊戲?</string>
+    <string name="alert_dialog_ok">確定</string>
+    <string name="alert_dialog_cancel">取消</string>
+    <string name="wintime">闖關次數：$$次</string>    
 </resources>
